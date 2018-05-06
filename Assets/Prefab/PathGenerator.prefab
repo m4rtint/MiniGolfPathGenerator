@@ -56,11 +56,17 @@ MonoBehaviour:
   m_EndPathObject: {fileID: 1042740676395392, guid: 1d4cd5a9a614c451ea4ba71fae36ccd8,
     type: 2}
   m_ListOfPathObjects:
-  - {fileID: 1383589139939048, guid: 9cd281b39945f41be90d2941cbf0fd78, type: 2}
-  - {fileID: 1527777319101134, guid: 723288be6a0cb4789a496942cd8cf8ed, type: 2}
-  - {fileID: 1807515940406992, guid: 1d2e6325ae240418091cf774cbebbc45, type: 2}
-  - {fileID: 1985928379994964, guid: 6a95395273edb4d2790b913397927ef3, type: 2}
-  - {fileID: 1965289716301370, guid: fafd604c3404049afb82208e069b8248, type: 2}
   - {fileID: 1033809303676644, guid: c5d7a61398dc244c0a923401339d248a, type: 2}
+  - {fileID: 1383589139939048, guid: 9cd281b39945f41be90d2941cbf0fd78, type: 2}
+  - {fileID: 1965289716301370, guid: fafd604c3404049afb82208e069b8248, type: 2}
+  - {fileID: 1616090732376062, guid: ab108cae6760a4245a34000145cff153, type: 2}
+  - {fileID: 1997049808579842, guid: b5c8d0ed92efd41fb9a0973bb7043364, type: 2}
+  - {fileID: 1737538230753956, guid: 5c4fc2ca5e1c24d70a91ee9e412a1609, type: 2}
+  - {fileID: 1514590326591774, guid: 47ed93e84036247ad8b239ca8ed78ee0, type: 2}
+  - {fileID: 1042978955851656, guid: dbd98da96ca2f4682853fb0892309ec6, type: 2}
+  - {fileID: 1527777319101134, guid: 723288be6a0cb4789a496942cd8cf8ed, type: 2}
+  - {fileID: 1985928379994964, guid: 6a95395273edb4d2790b913397927ef3, type: 2}
+  - {fileID: 1807515940406992, guid: 1d2e6325ae240418091cf774cbebbc45, type: 2}
+  - {fileID: 1613563808861624, guid: fba3d433401a24285bbfc775ea649bb0, type: 2}
   m_StartingPoint: {x: 0, y: 0, z: 0}
-  m_MaxPathSize: 4
+  m_MaxPathSize: 15
