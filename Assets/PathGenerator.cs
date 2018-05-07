@@ -84,7 +84,7 @@ public class PathGenerator : MonoBehaviour
     #region EndPath
     void SetEndPath(Path end) {
         while (!CheckPathDirectionFit(end)) {
-            RotatePath(end,false);
+            end.RotatePath(false);
         }
     }
     #endregion
@@ -125,7 +125,7 @@ public class PathGenerator : MonoBehaviour
         while (!CheckPathDirectionFit(NextPath))
         {
             //Rotate Until Fit
-            RotatePath(NextPath,randomDir);
+            NextPath.RotatePath(randomDir);
         }
 
         //Change Current Direction if needed
@@ -139,7 +139,7 @@ public class PathGenerator : MonoBehaviour
         bool IsGoodFit = false;
         foreach (Direction dir in path.m_EntryPoints)
         {
-            if (dir == GetOppositeDirection())
+            if (dir == RotationManager.instance.GetOppositeDirection(m_CurrentDirection))
             {
                 IsGoodFit = true;
             }
@@ -147,52 +147,14 @@ public class PathGenerator : MonoBehaviour
         return IsGoodFit;
     }
 
-
-    Direction GetOppositeDirection() {
-        int curDir = (int)m_CurrentDirection;
-        return (Direction)((curDir + 2) % 4);
-    }
-
-    void RotatePath(Path path, bool clockwise){
-        //Rotate axis
-        float isClockWise = clockwise ? 1 : -1;
-        Vector3 rotateCW = new Vector3(0, isClockWise*90, 0);
-        path.gameObject.transform.Rotate(rotateCW);
-
-        //Change Direction
-        for (int i = 0; i < path.m_EntryPoints.Length; i++){
-            Direction dir = path.m_EntryPoints[i];
-            path.m_EntryPoints[i] = clockwise ? RotateCW(dir) : RotateACW(dir);
-        }
-    }
-
     void ChangeCurrentDirection(Path path){
         foreach(Direction dir in path.m_EntryPoints){
-            if (dir != GetOppositeDirection()){
+            if (dir != RotationManager.instance.GetOppositeDirection(m_CurrentDirection)){
                 m_CurrentDirection = dir;
                 return;
             }
         }
     }
-
-    Direction RotateCW(Direction dir) {
-        int curDir = (int)dir;
-        return (Direction)((curDir + 1) % 4);
-    }
-
-    Direction RotateACW(Direction dir)
-    {
-        int curDir = (int)dir;
-        curDir = ((curDir - 1) % 4);
-
-        if (curDir < 0)
-        {
-            curDir = 3;
-        }
-        return (Direction)curDir;
-
-    }
-
 
 
     #endregion

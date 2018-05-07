@@ -17,4 +17,18 @@ public class Path:MonoBehaviour {
         }
     }
 
+    public void RotatePath(bool clockwise){
+        //Rotate axis
+        float isClockWise = clockwise ? 1 : -1;
+        Vector3 rotateCW = new Vector3(0, isClockWise * 90, 0);
+        transform.Rotate(rotateCW);
+
+        //Change Direction
+        for (int i = 0; i < m_EntryPoints.Length; i++)
+        {
+            Direction dir = m_EntryPoints[i];
+            m_EntryPoints[i] = clockwise ? RotationManager.instance.RotateCW(dir) : RotationManager.instance.RotateACW(dir);
+        }
+    }
+
 }
