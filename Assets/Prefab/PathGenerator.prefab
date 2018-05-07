@@ -20,13 +20,14 @@ GameObject:
   m_Component:
   - component: {fileID: 4199089631009944}
   - component: {fileID: 114845789872948498}
+  - component: {fileID: 114361956124374620}
   m_Layer: 0
   m_Name: PathGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4199089631009944
 Transform:
   m_ObjectHideFlags: 1
@@ -40,6 +41,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114361956124374620
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1442428570660970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d22d674663bf341ba8f85f21920dcd2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114845789872948498
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -68,5 +80,10 @@ MonoBehaviour:
   - {fileID: 1985928379994964, guid: 6a95395273edb4d2790b913397927ef3, type: 2}
   - {fileID: 1807515940406992, guid: 1d2e6325ae240418091cf774cbebbc45, type: 2}
   - {fileID: 1613563808861624, guid: fba3d433401a24285bbfc775ea649bb0, type: 2}
+  m_ListOfRampObjects:
+  - {fileID: 1968730092110216, guid: e4a7e2ba57c52436cbd291510ae29911, type: 2}
+  - {fileID: 1167494560271784, guid: 76c6fb0e733c24eb8a026546d8f1f7ce, type: 2}
+  - {fileID: 1275427106749222, guid: 2b343c181bdcb41a880b5e89ff8be401, type: 2}
+  - {fileID: 1292929136581516, guid: 972ba714bb3dc4477b716a6cd8022311, type: 2}
   m_StartingPoint: {x: 0, y: 0, z: 0}
   m_MaxPathSize: 15

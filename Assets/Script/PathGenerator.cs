@@ -9,39 +9,42 @@ SOUTH,
 WEST,
 }
 
-//Clockwise
-//North 0+1 %4
-//West 3+1 %4
-
-//ANticlockwise
-//North 
 public class PathGenerator : MonoBehaviour
 {
-
+    //Non changing values
+    readonly float RampHeight = 0.44f;
     readonly float PathSize = 3f;
 
+    //Start and End
     Path m_StartPath;
     Path m_EndPath;
-    Path[] m_ListOfPaths;
-
     Vector3 m_StartPoint;
+
+    //Current Properties
     Vector3 m_CurrentPoint;
-
     Direction m_CurrentDirection;
+    float m_CurrentHeight;
 
+    //Path Objects
     GameObject paths;
+    Path[] m_ListOfPaths;
+    Path[] m_ListOfRamps;
 
-    public PathGenerator(Path start, Path end, Vector3 startCoordinates, Path[] LoP)
+    public PathGenerator(Path start, Path end, Vector3 startCoordinates, Path[] LoP, Path[] LoR)
     {
         m_StartPath = start;
         m_StartPoint = startCoordinates;
         m_ListOfPaths = LoP;
+        m_ListOfRamps = LoR;
         m_EndPath = end;
         m_CurrentPoint = m_StartPoint;
         m_CurrentDirection = m_StartPath.GetComponent<Path>().m_EntryPoints[0];
+        m_CurrentHeight = 0f;
+
     }
 
     void ResetProperties(){
+        m_CurrentHeight = 0f;
         m_CurrentPoint = m_StartPoint;
         m_CurrentDirection = m_StartPath.GetComponent<Path>().m_EntryPoints[0];
     }
@@ -76,7 +79,7 @@ public class PathGenerator : MonoBehaviour
     GameObject InstantiatePath(Path path, Vector3 point)
     {
         GameObject pathNew = Instantiate(path.gameObject, point, Quaternion.identity);
-        pathNew.GetComponent<Path>().point = point;
+        pathNew.GetComponent<Path>().SetPoint(point);
         pathNew.transform.parent = paths.transform;
         return pathNew;
     }

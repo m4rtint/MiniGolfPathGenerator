@@ -15,6 +15,8 @@ public class GameController : MonoBehaviour
     [SerializeField]
     GameObject[] m_ListOfPathObjects;
     [SerializeField]
+    GameObject[] m_ListOfRampObjects;
+    [SerializeField]
     Vector3 m_StartingPoint;
     [SerializeField]
     int m_MaxPathSize;
@@ -22,22 +24,24 @@ public class GameController : MonoBehaviour
     Path m_StartPath;
     Path m_EndPath;
     Path[] m_ListOfPaths;
+    Path[] m_ListOfRamps;
     //Result
     Path[] m_ResultingPath;
 
     void Awake()
     {
-        m_ListOfPaths = SetupPathArray();
+        m_ListOfPaths = SetupPathArray(m_ListOfPathObjects);
+        m_ListOfRamps = SetupPathArray(m_ListOfRampObjects);
         m_StartPath = m_StartPathObject.GetComponent<Path>();
         m_EndPath = m_EndPathObject.GetComponent<Path>();
     }
 
-    Path[] SetupPathArray()
+    Path[] SetupPathArray(GameObject[] listOfObjects)
     {
-        Path[] paths = new Path[m_ListOfPathObjects.Length];
-        for (int i = 0; i < m_ListOfPathObjects.Length; i++)
+        Path[] paths = new Path[listOfObjects.Length];
+        for (int i = 0; i < listOfObjects.Length; i++)
         {
-            paths[i] = m_ListOfPathObjects[i].GetComponent<Path>();
+            paths[i] = listOfObjects[i].GetComponent<Path>();
         }
         return paths;
     }
@@ -45,7 +49,7 @@ public class GameController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        m_PathGenerator = new PathGenerator(m_StartPath, m_EndPath, m_StartingPoint, m_ListOfPaths);
+        m_PathGenerator = new PathGenerator(m_StartPath, m_EndPath, m_StartingPoint, m_ListOfPaths, m_ListOfRamps);
         m_PathGenerator.GeneratePath(m_MaxPathSize);
     }
 

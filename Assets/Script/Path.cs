@@ -7,17 +7,25 @@ public class Path:MonoBehaviour {
     readonly Vector3 SetupVector = new Vector3(1.5f,0,1.5f);
 
     public Direction[] m_EntryPoints;
-    public Vector3 point;
+    Vector3 point;
 
 
     void Awake() {
+        SetupTransform();
+    }
+
+    void SetupTransform() {
         if (gameObject.transform.childCount > 0)
         {
             gameObject.transform.GetChild(0).Translate(SetupVector);
         }
     }
 
-    public void RotatePath(bool clockwise){
+    public void SetPoint(Vector3 point){
+        this.point = point;
+    }
+
+    virtual public void RotatePath(bool clockwise){
         //Rotate axis
         float isClockWise = clockwise ? 1 : -1;
         Vector3 rotateCW = new Vector3(0, isClockWise * 90, 0);
