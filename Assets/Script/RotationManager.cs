@@ -34,4 +34,8 @@ public class RotationManager : MonoBehaviour {
         int curDir = (int)dir;
         return (Direction)((curDir + 2) % 4);
     }
+
+	public bool PathsMatches(Direction dir, Direction opposite) {
+		return dir == GetOppositeDirection (opposite);
+	}
 }

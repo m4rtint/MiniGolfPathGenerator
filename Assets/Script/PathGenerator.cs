@@ -23,7 +23,7 @@ public class PathGenerator : MonoBehaviour
     //Current Properties
     Vector3 m_CurrentPoint;
     Direction m_CurrentDirection;
-    float m_CurrentHeight;
+    int m_CurrentHeight;
 
     //Path Objects
     GameObject paths;
@@ -39,12 +39,12 @@ public class PathGenerator : MonoBehaviour
         m_EndPath = end;
         m_CurrentPoint = m_StartPoint;
         m_CurrentDirection = m_StartPath.GetComponent<Path>().m_EntryPoints[0];
-        m_CurrentHeight = 0f;
+        m_CurrentHeight = 0;
 
     }
 
     void ResetProperties(){
-        m_CurrentHeight = 0f;
+        m_CurrentHeight = 0;
         m_CurrentPoint = m_StartPoint;
         m_CurrentDirection = m_StartPath.GetComponent<Path>().m_EntryPoints[0];
     }
@@ -60,22 +60,22 @@ public class PathGenerator : MonoBehaviour
         // Middle Section
         for (int i = 0; i < maxPaths; i++)
         {
-            Path nextPath = RandomlyChoosePath();
-            Vector3 nextPosition = NextPosition();
-            GameObject nextPathGameObject = InstantiatePath(nextPath, nextPosition);
-            SetChosenPath(nextPathGameObject.GetComponent<Path>());
+			GameObject nextPathGameObject = InstantiatePath(RandomlyChoosePath(), NextPosition());
+			Path nextPath = nextPathGameObject.GetComponent<Path> ();
 
+			if (nextPathGameObject.GetComponent<Ramp> () != null) {
+				SetChosenRamp (nextPath);
+			} else {
+				SetChosenPath (nextPath);
+			}
         }
 
         //End Path
         NextPosition();
         GameObject m_NextEndPath = InstantiatePath(m_EndPath, m_CurrentPoint);
         SetEndPath(m_NextEndPath.GetComponent<Path>());
-
     }
-
-
-
+		
     GameObject InstantiatePath(Path path, Vector3 point)
     {
         GameObject pathNew = Instantiate(path.gameObject, point, Quaternion.identity);
@@ -83,6 +83,53 @@ public class PathGenerator : MonoBehaviour
         pathNew.transform.parent = paths.transform;
         return pathNew;
     }
+
+	#region RampPath
+	void SetChosenRamp(Ramp ramp) {
+		bool doGoHigher = Random.Range(0,10) % 2 == 0;
+		while (!CheckRampFitting (ramp, doGoHigher)) {
+
+
+		}
+	}
+
+//			void SetChosenPath(Path NextPath)
+//			{
+//				bool randomDir = Random.Range(0, 10) % 2 == 0;
+//				while (!CheckPathDirectionFit(NextPath))
+//				{
+//					//Rotate Until Fit
+//					NextPath.RotatePath(randomDir);
+//				}
+//
+//				//Change Current Direction if needed
+//				ChangeCurrentDirection(NextPath);
+//			}
+//
+//	bool CheckPathDirectionFit(Path path)
+//	{
+//		bool IsGoodFit = false;
+//		foreach (Direction dir in path.m_EntryPoints)
+//		{
+//			if (dir == RotationManager.instance.GetOppositeDirection(m_CurrentDirection))
+//			{
+//				IsGoodFit = true;
+//			}
+//		}
+//		return IsGoodFit;
+//	}
+
+	bool CheckRampFitting(Ramp ramp, bool GoDown) {
+		bool IsGoodFit = false;
+		if(RotationManager.instance.PathsMatches (m_CurrentDirection, ramp.Get_HighDirection)||
+			RotationManager.instance.PathsMatches(m_CurrentDirection, ramp.Get_LowDirection)){
+			IsGoodFit = true;
+		}
+		return IsGoodFit;
+	}
+
+	#endregion
+
 
     #region EndPath
     void SetEndPath(Path end) {
@@ -117,12 +164,20 @@ public class PathGenerator : MonoBehaviour
 
 
     #region PathChoosing
+	//TODO - Randomly choose the path Needs changing
     Path RandomlyChoosePath(){
-        int index = Random.Range(0, m_ListOfPaths.Length);
-        return m_ListOfPaths[index];
+		int ChanceToChooseRamp = Random.Range (0, 10);
+		if (ChanceToChooseRamp < 5) {
+			int index = Random.Range (0, m_ListOfPaths.Length);
+			return m_ListOfPaths [index];
+		} else {
+			int index = Random.Range(0, m_ListOfRamps.Length);
+			return m_ListOfRamps[index];
+		}
+        
     }
 
-    Path SetChosenPath(Path NextPath)
+    void SetChosenPath(Path NextPath)
     {
         bool randomDir = Random.Range(0, 10) % 2 == 0;
         while (!CheckPathDirectionFit(NextPath))
@@ -133,8 +188,6 @@ public class PathGenerator : MonoBehaviour
 
         //Change Current Direction if needed
         ChangeCurrentDirection(NextPath);
-
-        return NextPath;
     }
 
     bool CheckPathDirectionFit(Path path)
@@ -142,7 +195,7 @@ public class PathGenerator : MonoBehaviour
         bool IsGoodFit = false;
         foreach (Direction dir in path.m_EntryPoints)
         {
-            if (dir == RotationManager.instance.GetOppositeDirection(m_CurrentDirection))
+			if (RotationManager.instance.PathsMatches(dir,m_CurrentDirection))
             {
                 IsGoodFit = true;
             }
@@ -152,7 +205,7 @@ public class PathGenerator : MonoBehaviour
 
     void ChangeCurrentDirection(Path path){
         foreach(Direction dir in path.m_EntryPoints){
-            if (dir != RotationManager.instance.GetOppositeDirection(m_CurrentDirection)){
+			if(!RotationManager.instance.PathsMatches(dir,m_CurrentDirection)){
                 m_CurrentDirection = dir;
                 return;
             }
