@@ -20,7 +20,11 @@ public class Ramp : Path {
         return m_Low;
     }
 
-    public override void RotatePath(bool clockwise)
+	public int Get_Height() {
+		return Height;
+	}
+
+    public override void RotatePath(bool clockwise = true)
     {
         base.RotatePath(clockwise);
 
@@ -31,7 +35,12 @@ public class Ramp : Path {
             m_High = RotationManager.instance.RotateACW(m_High);
             m_Low = RotationManager.instance.RotateACW(m_Low);
         }
-
     }
+
+	public void ChangeRampHeight () {
+		float y_Change = RotationManager.instance.RampHeight * Height;
+		Vector3 moveRamp = new Vector3 (0, y_Change, 0);
+		transform.Translate (moveRamp);
+	}
 }
 

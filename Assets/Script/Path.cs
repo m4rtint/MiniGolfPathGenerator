@@ -25,7 +25,7 @@ public class Path:MonoBehaviour {
         this.point = point;
     }
 
-    virtual public void RotatePath(bool clockwise){
+    virtual public void RotatePath(bool clockwise = true){
         //Rotate axis
         float isClockWise = clockwise ? 1 : -1;
         Vector3 rotateCW = new Vector3(0, isClockWise * 90, 0);

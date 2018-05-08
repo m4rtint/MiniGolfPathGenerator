@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RotationManager : MonoBehaviour {
 
+	public readonly float RampHeight = 0.44f;
     public static RotationManager instance = null;
 
     void Awake(){

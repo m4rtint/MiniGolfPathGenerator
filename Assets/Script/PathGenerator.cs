@@ -12,7 +12,6 @@ WEST,
 public class PathGenerator : MonoBehaviour
 {
     //Non changing values
-    readonly float RampHeight = 0.44f;
     readonly float PathSize = 3f;
 
     //Start and End
@@ -23,6 +22,7 @@ public class PathGenerator : MonoBehaviour
     //Current Properties
     Vector3 m_CurrentPoint;
     Direction m_CurrentDirection;
+	//Height of current path denoted as levels - everything is multiples of 0.44f
     int m_CurrentHeight;
 
     //Path Objects
@@ -62,11 +62,14 @@ public class PathGenerator : MonoBehaviour
         {
 			GameObject nextPathGameObject = InstantiatePath(RandomlyChoosePath(), NextPosition());
 			Path nextPath = nextPathGameObject.GetComponent<Path> ();
+			Ramp nextRamp = nextPathGameObject.GetComponent<Ramp> ();
 
-			if (nextPathGameObject.GetComponent<Ramp> () != null) {
-				SetChosenRamp (nextPath);
+			if (nextRamp != null) {
+				SetChosenRamp (nextRamp);
+				nextRamp = null;
 			} else {
 				SetChosenPath (nextPath);
+				nextPath = null;
 			}
         }
 
@@ -87,45 +90,34 @@ public class PathGenerator : MonoBehaviour
 	#region RampPath
 	void SetChosenRamp(Ramp ramp) {
 		bool doGoHigher = Random.Range(0,10) % 2 == 0;
-		while (!CheckRampFitting (ramp, doGoHigher)) {
-
-
+		while (!CheckRampDirectionFitting (ramp, doGoHigher)) {
+			ramp.RotatePath ();
 		}
+
+		if (doGoHigher) {
+			//change path height
+			ramp.ChangeRampHeight ();
+		}
+
+		//Change Current Height
+		ChangeCurrentHeight(ramp, doGoHigher);
 	}
 
-//			void SetChosenPath(Path NextPath)
-//			{
-//				bool randomDir = Random.Range(0, 10) % 2 == 0;
-//				while (!CheckPathDirectionFit(NextPath))
-//				{
-//					//Rotate Until Fit
-//					NextPath.RotatePath(randomDir);
-//				}
-//
-//				//Change Current Direction if needed
-//				ChangeCurrentDirection(NextPath);
-//			}
-//
-//	bool CheckPathDirectionFit(Path path)
-//	{
-//		bool IsGoodFit = false;
-//		foreach (Direction dir in path.m_EntryPoints)
-//		{
-//			if (dir == RotationManager.instance.GetOppositeDirection(m_CurrentDirection))
-//			{
-//				IsGoodFit = true;
-//			}
-//		}
-//		return IsGoodFit;
-//	}
-
-	bool CheckRampFitting(Ramp ramp, bool GoDown) {
+	bool CheckRampDirectionFitting(Ramp ramp, bool GoDown) {
 		bool IsGoodFit = false;
-		if(RotationManager.instance.PathsMatches (m_CurrentDirection, ramp.Get_HighDirection)||
-			RotationManager.instance.PathsMatches(m_CurrentDirection, ramp.Get_LowDirection)){
+
+		if ((GoDown && RotationManager.instance.PathsMatches (m_CurrentDirection, ramp.Get_HighDirection())) ||
+			(!GoDown && RotationManager.instance.PathsMatches (m_CurrentDirection, ramp.Get_LowDirection ()))){
 			IsGoodFit = true;
 		}
+
 		return IsGoodFit;
+	}
+
+	void ChangeCurrentHeight (Ramp ramp, bool goHigher) {
+		//Change Current Height
+		int UpOrDown = goHigher ? 1 : -1;
+		m_CurrentHeight += (UpOrDown * ramp.Get_Height());
 	}
 
 	#endregion
@@ -141,19 +133,21 @@ public class PathGenerator : MonoBehaviour
 
     #region DirectionSpawning
     Vector3 NextPosition(){
-        Vector3 placement = Vector3.zero;
+		float y_Height = m_CurrentHeight * RotationManager.instance.RampHeight;
+		Vector3 placement = new Vector3(0,y_Height,0);
+
         switch(m_CurrentDirection){
             case Direction.EAST:
-                placement = new Vector3(0, 0, PathSize);
+			placement += new Vector3(0, 0, PathSize);
                 break;
             case Direction.WEST:
-                placement = new Vector3(0, 0, -PathSize);
+			placement += new Vector3(0, 0, -PathSize);
                 break;
             case Direction.NORTH:
-                placement = new Vector3(-PathSize, 0, 0);
+			placement += new Vector3(-PathSize, 0, 0);
                 break;
             case Direction.SOUTH:
-                placement = new Vector3(PathSize, 0, 0);
+			placement += new Vector3(PathSize, 0, 0);
                 break;
         }
 
