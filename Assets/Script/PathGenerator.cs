@@ -60,7 +60,6 @@ public class PathGenerator : MonoBehaviour
         // Middle Section
         for (int i = 0; i < maxPaths; i++)
         {
-			//BUG Next Position issues.
 			GameObject nextPathGameObject = InstantiatePath(RandomlyChoosePath(), NextPosition());
 			Path nextPath = nextPathGameObject.GetComponent<Path> ();
 			Ramp nextRamp = nextPathGameObject.GetComponent<Ramp> ();
@@ -114,11 +113,12 @@ public class PathGenerator : MonoBehaviour
 	void ChangeCurrentHeight (Ramp ramp, bool goHigher) {
 		//Change Current Height
 		int UpOrDown = goHigher ? 1 : -1;
-		//Update Height
-		m_CurrentHeight += (UpOrDown * ramp.Get_Height());
-		Debug.Log ("Current Height" + m_CurrentHeight);
+        //Update Height
+        int TempHeight = UpOrDown * ramp.Get_Height();
+        m_CurrentHeight += TempHeight;
+		Debug.Log ("Current Height: " + m_CurrentHeight);
 		//Update Point
-		m_CurrentPoint += new Vector3 (0, m_CurrentHeight * RotationManager.instance.RampHeight, 0);
+        m_CurrentPoint.y = m_CurrentHeight * RotationManager.instance.RampHeight;
 	}
 
 	#endregion
