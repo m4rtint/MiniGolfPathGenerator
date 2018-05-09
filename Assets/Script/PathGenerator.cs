@@ -33,16 +33,17 @@ public class PathGenerator : MonoBehaviour
     //Percentages
     [Range(0,100)]
     [SerializeField]
-    float Path;
+    float m_PathPercentage;
 
     [Range(0, 100)]
     [SerializeField]
-    float Ramp;
+    float m_RampPercentage;
 
     [Range(0, 100)]
     [SerializeField]
-    float Turn;
+    float m_TurnPercentage;
 
+    #region properties
     public void  SetPathGenerator(Path start, Path end, Vector3 startCoordinates, Path[] LoP, Path[] LoR)
     {
         m_StartPath = start;
@@ -60,7 +61,9 @@ public class PathGenerator : MonoBehaviour
         m_CurrentPoint = m_StartPoint;
         m_CurrentDirection = m_StartPath.GetComponent<Path>().m_EntryPoints[0];
     }
+    #endregion
 
+    #region Generation
     public void GeneratePath(int maxPaths = 10)
     {
         ResetProperties();
@@ -97,9 +100,31 @@ public class PathGenerator : MonoBehaviour
         pathNew.transform.parent = paths.transform;
         return pathNew;
     }
+    
+    Path RandomlyChoosePath()
+    {
+        float Chance = Random.Range(0, 100);
+        float total = m_PathPercentage + m_RampPercentage + m_TurnPercentage;
 
-	#region RampPath
-	void SetChosenRamp(Ramp ramp) {
+
+        int ChanceToChooseRamp = Random.Range(0, 10);
+        if (ChanceToChooseRamp < 5)
+        {
+            int index = Random.Range(0, m_ListOfPaths.Length);
+            return m_ListOfPaths[index];
+        }
+        else
+        {
+            int index = Random.Range(0, m_ListOfRamps.Length);
+            return m_ListOfRamps[index];
+        }
+
+    }
+
+    #endregion
+
+    #region RampPath
+    void SetChosenRamp(Ramp ramp) {
 		bool doGoHigher = Random.Range(0,10) % 2 == 0;
 		while (!CheckRampDirectionFitting (ramp, doGoHigher)) {
 			ramp.RotatePath ();
@@ -170,19 +195,6 @@ public class PathGenerator : MonoBehaviour
 
 
     #region PathChoosing
-	//TODO - Randomly choose the path Needs changing
-    Path RandomlyChoosePath(){
-		int ChanceToChooseRamp = Random.Range (0, 10);
-		if (ChanceToChooseRamp < 5) {
-			int index = Random.Range (0, m_ListOfPaths.Length);
-			return m_ListOfPaths [index];
-		} else {
-			int index = Random.Range(0, m_ListOfRamps.Length);
-			return m_ListOfRamps[index];
-		}
-        
-    }
-
     void SetChosenPath(Path NextPath)
     {
         bool randomDir = Random.Range(0, 10) % 2 == 0;
