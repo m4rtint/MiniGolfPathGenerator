@@ -34,15 +34,15 @@ public class PathGenerator : MonoBehaviour
     //Percentages
     [Range(0,100)]
     [SerializeField]
-	int m_PathPercentage;
+	float m_PathPercentage;
 
     [Range(0, 100)]
     [SerializeField]
-	int m_RampPercentage;
+	float m_RampPercentage;
 
     [Range(0, 100)]
     [SerializeField]
-    int m_TurnPercentage;
+	float m_TurnPercentage;
 
     #region properties
 	public void  SetPathGenerator(Path start, Path end, Vector3 startCoordinates, Path[] LoP, Path[] LoR, Path[] LoT)
@@ -106,16 +106,16 @@ public class PathGenerator : MonoBehaviour
     
     Path RandomlyChoosePath()
     {
-        int chance = Random.Range(0, 100);
-        int total = m_PathPercentage + m_RampPercentage + m_TurnPercentage;
-		int first = (m_PathPercentage / total)*100;
-		int second = (m_RampPercentage / total)*100;
-
+		//TODO Fix this 
+        float chance = Random.Range(0, 100);
+		float total = m_PathPercentage + m_RampPercentage + m_TurnPercentage;
+		float first = (m_PathPercentage / total)*100;
+		float second = first+(m_RampPercentage / total)*100;
 		if (chance < first) {
 			//Path
 			int index = Random.Range(0, m_ListOfPaths.Length);
 			return m_ListOfPaths[index];
-		} else if (first < chance && chance < second) {
+		} else if (chance < second) {
 			//Ramp
 			int index = Random.Range(0, m_ListOfRamps.Length);
 			return m_ListOfRamps[index];
