@@ -323,13 +323,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 618774910}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.17666508, y: -0.22656079, z: 0.04182697, w: 0.9569275}
+  m_LocalPosition: {x: 8.01, y: 8.95, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 20.92, y: -26.64, z: 0}
 --- !u!1 &766939936
 GameObject:
   m_ObjectHideFlags: 0
@@ -412,7 +412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &785143965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -675,6 +675,11 @@ Prefab:
     - target: {fileID: 1442428570660970, guid: 985ba4bdcd7ad4460985a5ec3a220e89, type: 2}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114845789872948498, guid: 985ba4bdcd7ad4460985a5ec3a220e89,
+        type: 2}
+      propertyPath: m_MaxPathSize
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 985ba4bdcd7ad4460985a5ec3a220e89, type: 2}

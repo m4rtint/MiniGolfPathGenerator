@@ -60,6 +60,7 @@ public class PathGenerator : MonoBehaviour
         // Middle Section
         for (int i = 0; i < maxPaths; i++)
         {
+			//BUG Next Position issues.
 			GameObject nextPathGameObject = InstantiatePath(RandomlyChoosePath(), NextPosition());
 			Path nextPath = nextPathGameObject.GetComponent<Path> ();
 			Ramp nextRamp = nextPathGameObject.GetComponent<Ramp> ();
@@ -69,7 +70,6 @@ public class PathGenerator : MonoBehaviour
 				nextRamp = null;
 			} else {
 				SetChosenPath (nextPath);
-				nextPath = null;
 			}
         }
 
@@ -103,21 +103,22 @@ public class PathGenerator : MonoBehaviour
 		ChangeCurrentHeight(ramp, doGoHigher);
 	}
 
-	bool CheckRampDirectionFitting(Ramp ramp, bool GoDown) {
-		bool IsGoodFit = false;
-
-		if ((GoDown && RotationManager.instance.PathsMatches (m_CurrentDirection, ramp.Get_HighDirection())) ||
-			(!GoDown && RotationManager.instance.PathsMatches (m_CurrentDirection, ramp.Get_LowDirection ()))){
-			IsGoodFit = true;
+	bool CheckRampDirectionFitting(Ramp ramp, bool GoHigh) {
+		if (GoHigh) {
+			return RotationManager.instance.PathsMatches (m_CurrentDirection, ramp.Get_LowDirection());
+		} else {
+			return RotationManager.instance.PathsMatches (m_CurrentDirection, ramp.Get_HighDirection());
 		}
-
-		return IsGoodFit;
 	}
 
 	void ChangeCurrentHeight (Ramp ramp, bool goHigher) {
 		//Change Current Height
 		int UpOrDown = goHigher ? 1 : -1;
+		//Update Height
 		m_CurrentHeight += (UpOrDown * ramp.Get_Height());
+		Debug.Log ("Current Height" + m_CurrentHeight);
+		//Update Point
+		m_CurrentPoint += new Vector3 (0, m_CurrentHeight * RotationManager.instance.RampHeight, 0);
 	}
 
 	#endregion
@@ -133,8 +134,7 @@ public class PathGenerator : MonoBehaviour
 
     #region DirectionSpawning
     Vector3 NextPosition(){
-		float y_Height = m_CurrentHeight * RotationManager.instance.RampHeight;
-		Vector3 placement = new Vector3(0,y_Height,0);
+		Vector3 placement = Vector3.zero;
 
         switch(m_CurrentDirection){
             case Direction.EAST:
@@ -154,7 +154,8 @@ public class PathGenerator : MonoBehaviour
         m_CurrentPoint = m_CurrentPoint + placement;
         return m_CurrentPoint;
     }
-#endregion
+
+	#endregion
 
 
     #region PathChoosing
