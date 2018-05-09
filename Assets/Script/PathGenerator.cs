@@ -30,7 +30,20 @@ public class PathGenerator : MonoBehaviour
     Path[] m_ListOfPaths;
     Path[] m_ListOfRamps;
 
-    public PathGenerator(Path start, Path end, Vector3 startCoordinates, Path[] LoP, Path[] LoR)
+    //Percentages
+    [Range(0,100)]
+    [SerializeField]
+    float Path;
+
+    [Range(0, 100)]
+    [SerializeField]
+    float Ramp;
+
+    [Range(0, 100)]
+    [SerializeField]
+    float Turn;
+
+    public void  SetPathGenerator(Path start, Path end, Vector3 startCoordinates, Path[] LoP, Path[] LoR)
     {
         m_StartPath = start;
         m_StartPoint = startCoordinates;
@@ -40,7 +53,6 @@ public class PathGenerator : MonoBehaviour
         m_CurrentPoint = m_StartPoint;
         m_CurrentDirection = m_StartPath.GetComponent<Path>().m_EntryPoints[0];
         m_CurrentHeight = 0;
-
     }
 
     void ResetProperties(){
@@ -116,7 +128,6 @@ public class PathGenerator : MonoBehaviour
         //Update Height
         int TempHeight = UpOrDown * ramp.Get_Height();
         m_CurrentHeight += TempHeight;
-		Debug.Log ("Current Height: " + m_CurrentHeight);
 		//Update Point
         m_CurrentPoint.y = m_CurrentHeight * RotationManager.instance.RampHeight;
 	}

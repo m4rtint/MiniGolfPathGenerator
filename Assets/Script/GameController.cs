@@ -34,6 +34,7 @@ public class GameController : MonoBehaviour
         m_ListOfRamps = SetupPathArray(m_ListOfRampObjects);
         m_StartPath = m_StartPathObject.GetComponent<Path>();
         m_EndPath = m_EndPathObject.GetComponent<Path>();
+        m_PathGenerator = GetComponent<PathGenerator>();
     }
 
     Path[] SetupPathArray(GameObject[] listOfObjects)
@@ -49,7 +50,7 @@ public class GameController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        m_PathGenerator = new PathGenerator(m_StartPath, m_EndPath, m_StartingPoint, m_ListOfPaths, m_ListOfRamps);
+        m_PathGenerator.SetPathGenerator(m_StartPath, m_EndPath, m_StartingPoint, m_ListOfPaths, m_ListOfRamps);
         m_PathGenerator.GeneratePath(m_MaxPathSize);
     }
 
