@@ -16,6 +16,9 @@ public class GameController : MonoBehaviour
     GameObject[] m_ListOfPathObjects;
     [SerializeField]
     GameObject[] m_ListOfRampObjects;
+	[SerializeField]
+	GameObject[] m_ListOfTurnObjects;
+
     [SerializeField]
     Vector3 m_StartingPoint;
     [SerializeField]
@@ -25,6 +28,7 @@ public class GameController : MonoBehaviour
     Path m_EndPath;
     Path[] m_ListOfPaths;
     Path[] m_ListOfRamps;
+	Path[] m_ListOfTurns;
     //Result
     Path[] m_ResultingPath;
 
@@ -32,6 +36,7 @@ public class GameController : MonoBehaviour
     {
         m_ListOfPaths = SetupPathArray(m_ListOfPathObjects);
         m_ListOfRamps = SetupPathArray(m_ListOfRampObjects);
+		m_ListOfTurns = SetupPathArray (m_ListOfTurnObjects);
         m_StartPath = m_StartPathObject.GetComponent<Path>();
         m_EndPath = m_EndPathObject.GetComponent<Path>();
         m_PathGenerator = GetComponent<PathGenerator>();
@@ -50,7 +55,7 @@ public class GameController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        m_PathGenerator.SetPathGenerator(m_StartPath, m_EndPath, m_StartingPoint, m_ListOfPaths, m_ListOfRamps);
+		m_PathGenerator.SetPathGenerator(m_StartPath, m_EndPath, m_StartingPoint, m_ListOfPaths, m_ListOfRamps, m_ListOfTurns);
         m_PathGenerator.GeneratePath(m_MaxPathSize);
     }
 

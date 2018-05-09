@@ -29,31 +29,34 @@ public class PathGenerator : MonoBehaviour
     GameObject paths;
     Path[] m_ListOfPaths;
     Path[] m_ListOfRamps;
+	Path[] m_ListOfTurns;
 
     //Percentages
     [Range(0,100)]
     [SerializeField]
-    float m_PathPercentage;
+	int m_PathPercentage;
 
     [Range(0, 100)]
     [SerializeField]
-    float m_RampPercentage;
+	int m_RampPercentage;
 
     [Range(0, 100)]
     [SerializeField]
-    float m_TurnPercentage;
+    int m_TurnPercentage;
 
     #region properties
-    public void  SetPathGenerator(Path start, Path end, Vector3 startCoordinates, Path[] LoP, Path[] LoR)
+	public void  SetPathGenerator(Path start, Path end, Vector3 startCoordinates, Path[] LoP, Path[] LoR, Path[] LoT)
     {
         m_StartPath = start;
         m_StartPoint = startCoordinates;
         m_ListOfPaths = LoP;
         m_ListOfRamps = LoR;
+		m_ListOfTurns = LoT;
         m_EndPath = end;
         m_CurrentPoint = m_StartPoint;
         m_CurrentDirection = m_StartPath.GetComponent<Path>().m_EntryPoints[0];
         m_CurrentHeight = 0;
+
     }
 
     void ResetProperties(){
@@ -103,22 +106,24 @@ public class PathGenerator : MonoBehaviour
     
     Path RandomlyChoosePath()
     {
-        float Chance = Random.Range(0, 100);
-        float total = m_PathPercentage + m_RampPercentage + m_TurnPercentage;
+        int chance = Random.Range(0, 100);
+        int total = m_PathPercentage + m_RampPercentage + m_TurnPercentage;
+		int first = (m_PathPercentage / total)*100;
+		int second = (m_RampPercentage / total)*100;
 
-
-        int ChanceToChooseRamp = Random.Range(0, 10);
-        if (ChanceToChooseRamp < 5)
-        {
-            int index = Random.Range(0, m_ListOfPaths.Length);
-            return m_ListOfPaths[index];
-        }
-        else
-        {
-            int index = Random.Range(0, m_ListOfRamps.Length);
-            return m_ListOfRamps[index];
-        }
-
+		if (chance < first) {
+			//Path
+			int index = Random.Range(0, m_ListOfPaths.Length);
+			return m_ListOfPaths[index];
+		} else if (first < chance && chance < second) {
+			//Ramp
+			int index = Random.Range(0, m_ListOfRamps.Length);
+			return m_ListOfRamps[index];
+		} else {
+			//Turn
+			int index = Random.Range(0, m_ListOfTurns.Length);
+			return m_ListOfTurns[index];
+		}
     }
 
     #endregion
